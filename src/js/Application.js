@@ -2,30 +2,40 @@ import EventEmitter from "eventemitter3";
 import image from "../images/planet.svg";
 
 export default class Application extends EventEmitter {
-  static get events() {
-    return {
-      READY: "ready",
-    };
-  }
+    static get events() {
+        return {
+            READY: "ready",
+        };
+    }
 
-  constructor() {
-    super();
+    constructor() {
+        super();
 
-    const box = document.createElement("div");
-    box.classList.add("box");
-    box.innerHTML = this._render({
-      name: "Placeholder",
-      terrain: "placeholder",
-      population: 0,
-    });
+        this._loading = <progress></progress>;
 
-    document.body.querySelector(".main").appendChild(box);
+        const box = document.createElement("div");
+        box.classList.add("box");
+        box.innerHTML = this._render({
+            name: "Placeholder",
+            terrain: "placeholder",
+            population: 0,
+        });
 
-    this.emit(Application.events.READY);
-  }
+        document.body.querySelector(".main").appendChild(box);
 
-  _render({ name, terrain, population }) {
-    return `
+        this.emit(Application.events.READY);
+    }
+
+    async _load() {
+        let task = await fetch("https://example.com");
+    }
+
+    _create() {}
+    _startLoading() {}
+    _stopLoading() {}
+
+    _render({ name, terrain, population }) {
+        return `
 <article class="media">
   <div class="media-left">
     <figure class="image is-64x64">
@@ -43,5 +53,5 @@ export default class Application extends EventEmitter {
   </div>
 </article>
     `;
-  }
+    }
 }
