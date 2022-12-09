@@ -12,7 +12,7 @@ export default class Application extends EventEmitter {
         super();
 
         this._loading = document.querySelector(".progress");
-        this._startLoading(true);
+        //this._startLoading(true);
 
         const box = document.createElement("div");
         box.classList.add("box");
@@ -52,13 +52,14 @@ export default class Application extends EventEmitter {
                     terrain: element.terrain,
                     population: element.population,
                 });
-                this._stopLoading(false);
+                //this._stopLoading(false);
                 document.body.querySelector(".main").appendChild(box);
             });
         });
     }
-    //_startLoading() {}
-    //_stopLoading() {}
+
+    _startLoading() {}
+    _stopLoading() {}
 
     _render({ name, terrain, population }) {
         return `
