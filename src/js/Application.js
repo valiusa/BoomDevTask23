@@ -27,13 +27,13 @@ export default class Application extends EventEmitter {
         this.emit(Application.events.READY);
     }
 
-    async _load() {
-        let task = await fetch("https://swapi.boom.dev/api/planets").then(
-            (response) => {
-                this._loading.style.display = "none";
-            }
-        );
-    }
+    // async _load() {
+    //     let task = await fetch("https://swapi.boom.dev/api/planets").then(
+    //         (response) => {
+    //             this._loading.style.display = "none";
+    //         }
+    //     );
+    // }
 
     async _load() {
         const result = await fetch("https://swapi.boom.dev/api/planets");
