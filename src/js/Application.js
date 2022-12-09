@@ -27,21 +27,32 @@ export default class Application extends EventEmitter {
     }
 
     _create() {
-        this._load().then((planets) => {
-            planets.forEach((element) => {
+        this._load().then((response) => {
+            response.results.forEach((element) => {
                 const box = document.createElement("div");
                 box.classList.add("box");
-
                 box.innerHTML = this._render({
                     name: element.name,
-                    terrain: element.terrain,
+                    description: element.description,
                     population: element.population,
                 });
-
-                this._stopLoading();
-                document.body.querySelector(".main").appendChild(box);
             });
         });
+        // this._load().then((planets) => {
+        //     planets.forEach((element) => {
+        //         const box = document.createElement("div");
+        //         box.classList.add("box");
+
+        //         box.innerHTML = this._render({
+        //             name: element.name,
+        //             terrain: element.terrain,
+        //             population: element.population,
+        //         });
+
+        //         this._stopLoading();
+        //         document.body.querySelector(".main").appendChild(box);
+        //     });
+        // });
     }
 
     _startLoading() {
