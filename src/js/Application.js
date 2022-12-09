@@ -11,7 +11,8 @@ export default class Application extends EventEmitter {
     constructor() {
         super();
 
-        this._loading = progress = document.querySelector(".pregress");
+        this._loading = document.querySelector(".progress");
+        this._startLoading(true);
 
         const box = document.createElement("div");
         box.classList.add("box");
@@ -34,9 +35,30 @@ export default class Application extends EventEmitter {
         );
     }
 
-    _create() {}
-    _startLoading() {}
-    _stopLoading() {}
+    async _load() {
+        const result = await fetch("https://swapi.boom.dev/api/planets");
+        const planets = await result.json();
+
+        return planets.results;
+    }
+
+    _create() {
+        this._load().then((planets) => {
+            planets.forEach((element) => {
+                const box = document.createElement("div");
+                box.classList.add("box");
+                box.innerHTML = this._render({
+                    name: element.name,
+                    terrain: element.terrain,
+                    population: element.population,
+                });
+                this._stopLoading(false);
+                document.body.querySelector(".main").appendChild(box);
+            });
+        });
+    }
+    //_startLoading() {}
+    //_stopLoading() {}
 
     _render({ name, terrain, population }) {
         return `
