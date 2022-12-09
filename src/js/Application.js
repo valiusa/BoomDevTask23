@@ -30,12 +30,17 @@ export default class Application extends EventEmitter {
         this._load().then((response) => {
             response.results.forEach((element) => {
                 const box = document.createElement("div");
+
                 box.classList.add("box");
                 box.innerHTML = this._render({
                     name: element.name,
                     description: element.description,
                     population: element.population,
                 });
+
+                this._stopLoading();
+
+                document.body.querySelector(".main").appendChild("box");
             });
         });
         // this._load().then((planets) => {
