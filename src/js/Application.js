@@ -12,34 +12,18 @@ export default class Application extends EventEmitter {
         super();
 
         this._loading = document.querySelector(".progress");
-        //this._startLoading(true);
 
-        const box = document.createElement("div");
-        box.classList.add("box");
-        box.innerHTML = this._render({
-            name: "Placeholder",
-            terrain: "placeholder",
-            population: 0,
-        });
-
-        document.body.querySelector(".main").appendChild(box);
-
+        this._startLoading();
+        this._create();
         this.emit(Application.events.READY);
     }
 
-    // async _load() {
-    //     let task = await fetch("https://swapi.boom.dev/api/planets").then(
-    //         (response) => {
-    //             this._loading.style.display = "none";
-    //         }
-    //     );
-    // }
-
     async _load() {
-        const result = await fetch("https://swapi.boom.dev/api/planets");
-        const planets = await result.json();
-
-        return planets.results;
+        return await fetch("https://swapi.boom.dev/api/planets").then(
+            (response) => {
+                return response.json();
+            }
+        );
     }
 
     _create() {
@@ -47,19 +31,25 @@ export default class Application extends EventEmitter {
             planets.forEach((element) => {
                 const box = document.createElement("div");
                 box.classList.add("box");
+
                 box.innerHTML = this._render({
                     name: element.name,
                     terrain: element.terrain,
                     population: element.population,
                 });
-                //this._stopLoading(false);
+
+                this._stopLoading();
                 document.body.querySelector(".main").appendChild(box);
             });
         });
     }
 
-    _startLoading() {}
-    _stopLoading() {}
+    _startLoading() {
+        this._loading.style.display = "block";
+    }
+    _stopLoading() {
+        this._loading.style.display = "none";
+    }
 
     _render({ name, terrain, population }) {
         return `
