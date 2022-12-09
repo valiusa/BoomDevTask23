@@ -11,7 +11,7 @@ export default class Application extends EventEmitter {
     constructor() {
         super();
 
-        this._loading = `<progress></progress>`;
+        this._loading = progress = document.querySelector(".pregress");
 
         const box = document.createElement("div");
         box.classList.add("box");
@@ -29,8 +29,7 @@ export default class Application extends EventEmitter {
     async _load() {
         let task = await fetch("https://swapi.boom.dev/api/planets").then(
             (response) => {
-                const progress = document.querySelector(".pregress");
-                progress.style.display = "none";
+                this._loading.style.display = "none";
             }
         );
     }
