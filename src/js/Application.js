@@ -11,6 +11,7 @@ export default class Application extends EventEmitter {
     constructor() {
         super();
 
+        this._url = "https://swapi.boom.dev/api/planets";
         this._loading = document.querySelector(".progress");
 
         this._startLoading();
@@ -19,45 +20,38 @@ export default class Application extends EventEmitter {
     }
 
     async _load() {
-        return await fetch("https://swapi.boom.dev/api/planets").then(
-            (response) => {
-                return response.json();
-            }
-        );
+        return await fetch(url).then((response) => {
+            return response.json();
+        });
     }
 
     _create() {
-        this._load().then((response) => {
-            response.results.forEach((element) => {
-                const box = document.createElement("div");
-
-                box.classList.add("box");
-                box.innerHTML = this._render({
-                    name: element.name,
-                    description: element.description,
-                    population: element.population,
+        this._load(this._url)
+            .then((response) => {
+                response.results.forEach((element) => {
+                    const box = document.createElement("div");
+                    box.classList.add("box");
+                    box.innerHTML = this._render({
+                        name: element.name,
+                        terrain: element.terrain,
+                        population: element.population,
+                    });
+                    this._stopLoading();
+                    document.querySelector(".main").appendChild(box);
                 });
 
-                this._stopLoading();
-
-                document.body.querySelector(".main").appendChild("box");
+                if (response.next != null) {
+                    this._url = response.next;
+                    return { hasNextPage: true };
+                } else {
+                    return { hasNextPage: false };
+                }
+            })
+            .then((response) => {
+                if (response.hasNextPage) {
+                    this._create();
+                }
             });
-        });
-        // this._load().then((planets) => {
-        //     planets.forEach((element) => {
-        //         const box = document.createElement("div");
-        //         box.classList.add("box");
-
-        //         box.innerHTML = this._render({
-        //             name: element.name,
-        //             terrain: element.terrain,
-        //             population: element.population,
-        //         });
-
-        //         this._stopLoading();
-        //         document.body.querySelector(".main").appendChild(box);
-        //     });
-        // });
     }
 
     _startLoading() {
